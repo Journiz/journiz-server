@@ -1,8 +1,8 @@
 migrate((db) => {
   const collection = new Collection({
     "id": "0s8o69pg0aimu6b",
-    "created": "2023-03-03 10:32:57.562Z",
-    "updated": "2023-03-03 10:32:57.562Z",
+    "created": "2023-03-05 10:13:07.243Z",
+    "updated": "2023-03-05 10:13:07.243Z",
     "name": "journey",
     "type": "base",
     "system": false,
@@ -109,6 +109,23 @@ migrate((db) => {
         "required": false,
         "unique": false,
         "options": {}
+      },
+      {
+        "system": false,
+        "id": "g2ohjtcl",
+        "name": "points",
+        "type": "relation",
+        "required": false,
+        "unique": false,
+        "options": {
+          "collectionId": "x5qckklqadwyz2k",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": null,
+          "displayFields": [
+            "id"
+          ]
+        }
       }
     ],
     "listRule": null,
