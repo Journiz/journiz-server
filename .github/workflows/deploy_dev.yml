@@ -43,6 +43,10 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+  trigger-redeploy:
+    name: Redeploy image
+    needs: [build]
+    steps:
       - name: SSH Hook to trigger pull on server
         uses: appleboy/ssh-action@v0.1.8
         with:
