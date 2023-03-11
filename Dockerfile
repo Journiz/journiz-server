@@ -12,7 +12,6 @@ COPY go.sum ${WORKDIR}
 RUN go mod download
 
 COPY *.go ${WORKDIR}
-COPY pb_migrations ${WORKDIR}/pb_migrations
 
 RUN go build -o /journiz
 
@@ -27,6 +26,7 @@ ENV SERVER_PORT=8090
 
 COPY --from=builder /journiz /
 RUN mkdir /pb_data
+COPY pb_migrations /pb_migrations
 
 EXPOSE ${SERVER_PORT}
 CMD /journiz serve --http ${SERVER_HOST}:${SERVER_PORT}
