@@ -12,7 +12,7 @@ COPY go.sum ${WORKDIR}
 RUN go mod download
 
 COPY *.go ${WORKDIR}
-COPY migrations ${WORKDIR}/migrations
+COPY pb_migrations ${WORKDIR}/pb_migrations
 
 RUN go build -o /journiz
 
