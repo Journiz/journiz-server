@@ -13,7 +13,7 @@ func NotifyUser(userId string, title string, content string) {
 
 	var result interface{}
 
-	c := request.Client{
+	var c = request.Client{
 		URL:    "https://onesignal.com/api/v1/notifications",
 		Method: "POST",
 		JSON: fmt.Sprintf(`{

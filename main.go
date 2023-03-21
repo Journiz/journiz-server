@@ -14,6 +14,8 @@ func main() {
 		print("WARN: No env file found.")
 	}
 
+	//notifications.NotifyUser("mike", "multiple", "Bonjour mike sur tes 2 devices")
+
 	app := pocketbase.New()
 
 	jsvm.MustRegisterMigrations(app, &jsvm.MigrationsOptions{
