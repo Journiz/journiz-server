@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
@@ -8,6 +9,11 @@ import (
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		print("WARN: No env file found.")
+	}
+
 	app := pocketbase.New()
 
 	jsvm.MustRegisterMigrations(app, &jsvm.MigrationsOptions{
