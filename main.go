@@ -5,6 +5,7 @@ import (
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
+	"journiz-server/hooks"
 	"log"
 )
 
@@ -17,11 +18,11 @@ func main() {
 	//notifications.NotifyUser("mike", "multiple", "Bonjour mike sur tes 2 devices")
 
 	app := pocketbase.New()
+	hooks.SetupHooks(*app)
 
 	jsvm.MustRegisterMigrations(app, &jsvm.MigrationsOptions{
 		Dir: "pb_migrations",
 	})
-
 	migratecmd.MustRegister(app, app.RootCmd, &migratecmd.Options{
 		Automigrate:  true, // auto creates migration files when making collection changes
 		TemplateLang: "js",

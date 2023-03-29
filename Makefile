@@ -1,5 +1,8 @@
 BINARY_NAME=main
 
+watch:
+	~/go/bin/gow run main.go serve --http 0.0.0.0:8090
+
 dev:
 	go run main.go serve --http 0.0.0.0:8090
 
