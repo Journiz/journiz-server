@@ -5,7 +5,7 @@ import (
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
-	"journiz-server/hooks"
+	"journiz-server/src/hooks"
 	"log"
 )
 
