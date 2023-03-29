@@ -11,8 +11,9 @@ COPY go.sum ${WORKDIR}
 
 RUN go mod download
 
-COPY src/ ${WORKDIR}
+COPY src/ ${WORKDIR}src/
 COPY *.go ${WORKDIR}
+RUN ls -la ${WORKDIR}
 
 RUN go build -o /journiz
 
