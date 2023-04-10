@@ -34,7 +34,11 @@ func messageHooks(app pocketbase.PocketBase) {
 					}
 					senderName = user.GetString("username")
 				}
-				notifications.NotifyUser(userToNotify, "Nouveau message de "+senderName, e.Record.GetString("content"))
+				notifications.NotifyUser(userToNotify,
+					"Nouveau message de "+senderName,
+					e.Record.GetString("content"),
+					map[string]string{"event": "chatMessage", "conversation": conversation.Id},
+				)
 
 				return nil
 			})
