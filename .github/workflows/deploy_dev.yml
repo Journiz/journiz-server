@@ -47,6 +47,7 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: false
 
+
   trigger-redeploy:
     name: Redeploy image
     runs-on: ubuntu-latest
