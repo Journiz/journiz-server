@@ -6,6 +6,7 @@ import (
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"journiz-server/src/hooks"
+	"journiz-server/src/notifications"
 	"log"
 )
 
@@ -15,7 +16,7 @@ func main() {
 		print("WARN: No env file found.")
 	}
 
-	//notifications.NotifyUser("mike", "multiple", "Bonjour mike sur tes 2 devices")
+	notifications.NotifyUser("cw00ciyy1pgmger", "Équipe 1", `Bonjour "mike" heh`)
 
 	app := pocketbase.New()
 	hooks.SetupHooks(*app)

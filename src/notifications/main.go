@@ -5,6 +5,7 @@ import (
 	"github.com/monaco-io/request"
 	"log"
 	"os"
+	"strings"
 )
 
 func NotifyUser(userId string, title string, content string) {
@@ -27,7 +28,12 @@ func NotifyUser(userId string, title string, content string) {
   "contents": {
     "en": "%s"
   }
-}`, appId, userId, title, content),
+}`,
+			appId,
+			userId,
+			strings.Replace(title, `"`, `\"`, -1),
+			strings.Replace(content, `"`, `\"`, -1),
+		),
 		Header: map[string]string{"Authorization": "Basic " + apiKey},
 	}
 	resp := c.Send().Scan(&result)
