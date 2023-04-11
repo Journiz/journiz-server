@@ -28,7 +28,7 @@ func messageHooks(app pocketbase.PocketBase) {
 					senderName = team.GetString("name")
 				} else {
 					userToNotify = conversation.GetString("team")
-					user, err := txDao.FindRecordById("user", conversation.GetString("user"))
+					user, err := txDao.FindRecordById("users", conversation.GetString("user"))
 					if err != nil {
 						return err
 					}
