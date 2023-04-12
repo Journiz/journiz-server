@@ -11,12 +11,10 @@ func messageHooks(app pocketbase.PocketBase) {
 	app.OnRecordAfterCreateRequest().Add(func(e *core.RecordCreateEvent) error {
 		if e.Record.Collection().Name == "message" {
 			err := app.Dao().RunInTransaction(func(txDao *daos.Dao) error {
-
 				conversation, err := txDao.FindRecordById("conversation", e.Record.GetString("conversation"))
 				if err != nil {
 					return err
 				}
-
 				var userToNotify string
 				var senderName string
 				if e.Record.GetString("sender") == "team" {
@@ -39,7 +37,6 @@ func messageHooks(app pocketbase.PocketBase) {
 					e.Record.GetString("content"),
 					map[string]string{"event": "chatMessage", "conversation": conversation.Id},
 				)
-
 				return nil
 			})
 			if err != nil {
