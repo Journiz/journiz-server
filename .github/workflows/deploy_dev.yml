@@ -13,7 +13,7 @@ env:
 jobs:
   build:
     name: Build and push image
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -44,7 +44,7 @@ jobs:
         with:
           context: .
           push: true
-#          platforms: linux/amd64,linux/arm64/v8
+          platforms: linux/arm64/v8
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -54,7 +54,7 @@ jobs:
 
   trigger-redeploy:
     name: Redeploy image
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [build]
     steps:
       - name: SSH Hook to trigger pull on server
