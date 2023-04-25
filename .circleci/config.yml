@@ -5,8 +5,11 @@ workflows:
   build-and-publish-docker-image:
     jobs:
       - docker/publish:
-          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: journiz/journiz-server
           registry: ghcr.io
+          executor:
+            machine:
+              image: ubuntu-2004:current
           docker-password: GITHUB_TOKEN
           docker-username: CIRCLE_PROJECT_USERNAME
           tag: circleci
