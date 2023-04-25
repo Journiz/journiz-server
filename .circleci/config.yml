@@ -32,11 +32,11 @@ jobs:
 
 workflows:
   build-and-deploy:
-  jobs:
-    - build
-    - trigger-pull:
-        requires:
-          - build
+    jobs:
+      - build
+      - trigger-pull:
+          requires:
+            - build
 #        filters:
 #          branches:
 #            only: main # only deploy on the main branch
