@@ -20,3 +20,24 @@ jobs:
           image: journiz/journiz-server
           tag: $CIRCLE_BRANCH
           registry: ghcr.io
+
+  trigger-pull:
+    machine:
+      enabled: true
+    steps:
+      - run:
+          name: Trigger pull on server
+          command: |
+            ssh $SSH_USER@$SSH_HOST "$SSH_DEV_HOOK"
+
+workflows:
+  build-and-deploy:
+  jobs:
+    - build
+    - trigger-pull:
+        requires:
+          - build
+#        filters:
+#          branches:
+#            only: main # only deploy on the main branch
+
