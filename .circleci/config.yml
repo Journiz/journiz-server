@@ -7,6 +7,6 @@ workflows:
       - docker/publish:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           registry: ghcr.io
-          docker-password: $GITHUB_TOKEN
-          docker-username: $CIRCLE_PROJECT_USERNAME
+          docker-password: GITHUB_TOKEN
+          docker-username: CIRCLE_PROJECT_USERNAME
           tag: circleci
