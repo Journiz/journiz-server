@@ -29,8 +29,11 @@ jobs:
           name: Trigger pull on server
           command: |
             SCRIPT="~/scripts/deploy_$CIRCLE_BRANCH.sh"
-            ssh $SSH_USER@$SSH_HOST "[[ -f $SCRIPT ]] && $SCRIPT"
-            [[ -f $SCRIPT ]] || echo "WARNING: No deploy script exists for this branch. Skipping pull."
+            ssh $SSH_USER@$SSH_HOST "
+              [[ -f $SCRIPT ]] && $SCRIPT
+              [[ -f $SCRIPT ]] || echo WARNING: No deploy script exists for this branch. Skipping pull.
+            "
+            
 
 workflows:
   build-and-deploy:
