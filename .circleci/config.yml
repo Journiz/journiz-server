@@ -11,12 +11,12 @@ jobs:
       - run: echo "${GITHUB_TOKEN}" | docker login -u $CIRCLE_PROJECT_USERNAME --password-stdin ghcr.io
       - docker/build:
           image: journiz/journiz-server
-          tag: $CIRCLE_BRANCH
+          tag: develop
           dockerfile: Dockerfile
           use-buildkit: true
           registry: ghcr.io
           cache_from: ghcr.io/journiz/journiz-server
       - docker/push:
           image: journiz/journiz-server
-          tag: $CIRCLE_BRANCH
+          tag: develop
           registry: ghcr.io
