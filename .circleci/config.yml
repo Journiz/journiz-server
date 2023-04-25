@@ -8,9 +8,7 @@ jobs:
     resource_class: arm.medium
     steps:
       - checkout
-      - name: Docker Login
-        run: echo "${GITHUB_TOKEN}" | docker login -u $CIRCLE_PROJECT_USERNAME --password-stdin ghcr.io
-
+      - run: echo "${GITHUB_TOKEN}" | docker login -u $CIRCLE_PROJECT_USERNAME --password-stdin ghcr.io
       - docker/build:
           image: journiz/journiz-server
           tag: circleci
