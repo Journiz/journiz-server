@@ -3,7 +3,7 @@ version: '2.1'
 orbs:
   docker: circleci/docker@2.2.0
 jobs:
-  my-job:
+  build:
     machine:
       image: ubuntu-2004:current
     resource_class: arm.medium
