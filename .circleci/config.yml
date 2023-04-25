@@ -7,9 +7,7 @@ workflows:
       - docker/publish:
           image: journiz/journiz-server
           registry: ghcr.io
-          executor:
-            machine:
-              image: ubuntu-2004:current
+          executor-class: arm.medium
           docker-password: GITHUB_TOKEN
           docker-username: CIRCLE_PROJECT_USERNAME
           tag: circleci
