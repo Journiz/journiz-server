@@ -13,7 +13,6 @@ jobs:
           image: journiz/journiz-server
           tag: circleci
           dockerfile: Dockerfile
-          context: .
           use-buildkit: true
           registry: ghcr.io
-          cache-from: journiz/journiz-server
+          cache_from: journiz/journiz-server
