@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Trigger pull on server
           command: |
-            ssh $SSH_USER@$SSH_HOST "$SSH_DEV_HOOK"
+            ssh $SSH_USER@$SSH_HOST "~/scripts/deploy_$CIRCLE_BRANCH.sh"
 
 workflows:
   build-and-deploy:
