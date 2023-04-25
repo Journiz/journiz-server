@@ -30,7 +30,8 @@ jobs:
           command: |
             SCRIPT="~/scripts/deploy_$CIRCLE_BRANCH.sh"
             ssh $SSH_USER@$SSH_HOST "
-              [[ -f $SCRIPT ]] && $SCRIPT
+              echo "tmp : $SCRIPT"
+              [[ -f $SCRIPT ]] && echo "running $SCRIPT" && $SCRIPT
               [[ -f $SCRIPT ]] || echo WARNING: No deploy script exists for this branch. Skipping pull.
             "
             
