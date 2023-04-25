@@ -15,7 +15,7 @@ jobs:
           dockerfile: Dockerfile
           use-buildkit: true
           registry: ghcr.io
-          cache_from: journiz/journiz-server
+          cache_from: ghcr.io/journiz/journiz-server
       - docker/push:
           image: journiz/journiz-server
           tag: $CIRCLE_BRANCH
