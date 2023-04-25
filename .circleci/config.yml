@@ -1,13 +1,19 @@
+# .circleci/config.yml
 version: '2.1'
 orbs:
   docker: circleci/docker@2.2.0
-workflows:
-  build-and-publish-docker-image:
-    resource-class: arm.medium
-    jobs:
-      - docker/publish:
+jobs:
+  my-job:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - docker/build:
           image: journiz/journiz-server
-          registry: ghcr.io
-          docker-password: GITHUB_TOKEN
-          docker-username: CIRCLE_PROJECT_USERNAME
           tag: circleci
+          dockerfile: Dockerfile
+          context: .
+          use-buildkit: true
+          registry: ghcr.io
+          cache-from: journiz/journiz-server
