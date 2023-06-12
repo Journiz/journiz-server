@@ -6,6 +6,7 @@ import (
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"journiz-server/src/hooks"
+	"journiz-server/src/scheduled"
 	"log"
 )
 
@@ -17,6 +18,7 @@ func main() {
 
 	app := pocketbase.New()
 	hooks.SetupHooks(*app)
+	scheduled.SetupScheduled(*app)
 
 	jsvm.MustRegisterMigrations(app, &jsvm.MigrationsOptions{
 		Dir: "pb_migrations",
