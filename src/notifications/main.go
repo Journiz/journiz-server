@@ -48,7 +48,6 @@ func NotifyUser(userId string, title string, content string, data map[string]str
 	}
 
 	str := resp.String()
-	log.Println("Basic " + os.Getenv("ONESIGNAL_API_KEY"))
 	log.Println(result)
 	log.Println(resp)
 	log.Println(str)
