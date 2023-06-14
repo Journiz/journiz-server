@@ -15,24 +15,24 @@ func messageHooks(app pocketbase.PocketBase) {
 				if err != nil {
 					return err
 				}
-				var userToNotify string
+				var idOfUserToNotify string
 				var senderName string
 				if e.Record.GetString("sender") == "team" {
-					userToNotify = conversation.GetString("user")
+					idOfUserToNotify = conversation.GetString("user")
 					team, err := txDao.FindRecordById("team", conversation.GetString("team"))
 					if err != nil {
 						return err
 					}
 					senderName = team.GetString("name")
 				} else {
-					userToNotify = conversation.GetString("team")
+					idOfUserToNotify = conversation.GetString("team")
 					user, err := txDao.FindRecordById("users", conversation.GetString("user"))
 					if err != nil {
 						return err
 					}
 					senderName = user.GetString("username")
 				}
-				notifications.NotifyUser(userToNotify,
+				notifications.NotifyUser(idOfUserToNotify,
 					"Nouveau message de "+senderName,
 					e.Record.GetString("content"),
 					map[string]string{"event": "chatMessage", "conversation": conversation.Id},
