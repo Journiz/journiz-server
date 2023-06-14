@@ -11,14 +11,17 @@ import (
 )
 
 func main() {
+	// Load env file if any
 	if err := godotenv.Load(); err != nil {
 		print("WARN: No env file found.")
 	}
 
+	// Pocketbase hooks
 	app := pocketbase.New()
 	hooks.SetupHooks(*app)
 	scheduled.SetupScheduled(*app)
 
+	// Pocketbase configuration
 	jsvm.MustRegisterMigrations(app, &jsvm.MigrationsOptions{
 		Dir: "pb_migrations",
 	})
@@ -28,6 +31,7 @@ func main() {
 		Dir:          "pb_migrations",
 	})
 
+	// Run Pocketbase
 	if err := app.Start(); err != nil {
 		log.Fatal(err)
 	}
