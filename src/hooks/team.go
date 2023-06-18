@@ -1,10 +1,13 @@
 package hooks
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/daos"
 	"github.com/pocketbase/pocketbase/models"
+	"journiz-server/src/maps"
 )
 
 func teamHooks(app pocketbase.PocketBase) {
@@ -39,6 +42,39 @@ func teamHooks(app pocketbase.PocketBase) {
 				if err := txDao.SaveRecord(record); err != nil {
 					return err
 				}
+				return nil
+			})
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+
+	// On team update
+	app.OnRecordBeforeUpdateRequest().Add(func(e *core.RecordUpdateEvent) error {
+		if e.Record.Collection().Name == "team" {
+			err := app.Dao().RunInTransaction(func(txDao *daos.Dao) error {
+				// get trip associated with team, and then journey associated with trip
+				trip, err := txDao.FindRecordById("trip", e.Record.GetString("trip"))
+				if err != nil || trip == nil {
+					return err
+				}
+				journey, err := txDao.FindRecordById("journey", trip.GetString("journey"))
+				if err != nil || journey == nil {
+					return err
+				}
+
+				safeZoneJson := journey.GetString("safeZone")
+				var safeZone [][]float64
+				json.Unmarshal([]byte(safeZoneJson), &safeZone)
+
+				teamLng := e.Record.GetFloat("longitude")
+				teamLat := e.Record.GetFloat("latitude")
+				teamPoint := []float64{teamLng, teamLat}
+
+				isInside := maps.PointInPolygon(teamPoint, safeZone)
+				fmt.Println("isInside", isInside)
 				return nil
 			})
 			if err != nil {

@@ -17,7 +17,11 @@ func main() {
 	}
 
 	// Pocketbase hooks
-	app := pocketbase.New()
+	config := pocketbase.Config{
+		DefaultDebug: false,
+	}
+	app := pocketbase.NewWithConfig(&config)
+
 	hooks.SetupHooks(*app)
 	scheduled.SetupScheduled(*app)
 
