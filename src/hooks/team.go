@@ -88,7 +88,7 @@ func teamHooks(app pocketbase.PocketBase) {
 				if !isInside && !prevTeam.GetBool("isOutside") {
 					e.Record.Set("isOutside", true)
 					notifications.NotifyUser(e.Record.Id, "Sortie de route !", "Attention, vous êtes sortis de la zone de jeu !", map[string]string{"event": "teamOutside", "team": e.Record.Id})
-					notifications.NotifyUser(journey.GetString("user"), "Sortie de route !", "L'équipe "+e.Record.GetString("name")+" est sortie de la zone de jeu !", map[string]string{"event": "teamOutside", "team": e.Record.Id})
+					notifications.NotifyUser(journey.GetString("user"), "Sortie de route !", "L'équipe "+e.Record.GetString("name")+" est sortie de la zone de jeu !", map[string]string{"event": "userTeamOutside", "team": e.Record.Id})
 				}
 				return nil
 			})
