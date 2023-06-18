@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/daos"
@@ -81,7 +80,7 @@ func teamHooks(app pocketbase.PocketBase) {
 				teamPoint := []float64{teamLng, teamLat}
 
 				isInside := maps.PointInPolygon(teamPoint, safeZone)
-				fmt.Println("isInside", isInside)
+
 				if !isInside && !prevTeam.GetBool("isOutside") {
 					e.Record.Set("isOutside", true)
 				}
