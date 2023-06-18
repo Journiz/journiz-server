@@ -55,7 +55,14 @@ func teamHooks(app pocketbase.PocketBase) {
 	app.OnRecordBeforeUpdateRequest().Add(func(e *core.RecordUpdateEvent) error {
 		if e.Record.Collection().Name == "team" {
 			err := app.Dao().RunInTransaction(func(txDao *daos.Dao) error {
-				// get trip associated with team, and then journey associated with trip
+				prevTeam, err := txDao.FindRecordById("team", e.Record.Id)
+				if err != nil {
+					return err
+				}
+				if prevTeam.GetFloat("latitude") == e.Record.GetFloat("latitude") && prevTeam.GetFloat("longitude") == e.Record.GetFloat("longitude") {
+					return nil
+				}
+
 				trip, err := txDao.FindRecordById("trip", e.Record.GetString("trip"))
 				if err != nil || trip == nil {
 					return err
@@ -75,6 +82,12 @@ func teamHooks(app pocketbase.PocketBase) {
 
 				isInside := maps.PointInPolygon(teamPoint, safeZone)
 				fmt.Println("isInside", isInside)
+				if !isInside && !prevTeam.GetBool("isOutside") {
+					e.Record.Set("isOutside", true)
+				}
+				if isInside && prevTeam.GetBool("isOutside") {
+					e.Record.Set("isOutside", false)
+				}
 				return nil
 			})
 			if err != nil {
