@@ -7,6 +7,7 @@ import (
 	"github.com/pocketbase/pocketbase/daos"
 	"github.com/pocketbase/pocketbase/models"
 	"journiz-server/src/maps"
+	"journiz-server/src/notifications"
 )
 
 func teamHooks(app pocketbase.PocketBase) {
@@ -81,11 +82,13 @@ func teamHooks(app pocketbase.PocketBase) {
 
 				isInside := maps.PointInPolygon(teamPoint, safeZone)
 
-				if !isInside && !prevTeam.GetBool("isOutside") {
-					e.Record.Set("isOutside", true)
-				}
 				if isInside && prevTeam.GetBool("isOutside") {
 					e.Record.Set("isOutside", false)
+				}
+				if !isInside && !prevTeam.GetBool("isOutside") {
+					e.Record.Set("isOutside", true)
+					notifications.NotifyUser(e.Record.Id, "Sortie de route !", "Attention, vous êtes sortis de la zone de jeu !", map[string]string{"event": "teamOutside", "team": e.Record.Id})
+					notifications.NotifyUser(journey.GetString("user"), "Sortie de route !", "L'équipe "+e.Record.GetString("name")+" est sortie de la zone de jeu !", map[string]string{"event": "teamOutside", "team": e.Record.Id})
 				}
 				return nil
 			})
