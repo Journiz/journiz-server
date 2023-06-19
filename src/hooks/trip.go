@@ -50,7 +50,6 @@ func tripHooks(app pocketbase.PocketBase) {
 				}
 				record := models.NewRecord(collection)
 				record.Set("user", journey.GetString("user"))
-				fmt.Println("trip", e.Record.Id)
 				record.Set("trip", e.Record.Id)
 				record.Set("isBroadcast", true)
 				if err := txDao.SaveRecord(record); err != nil {
