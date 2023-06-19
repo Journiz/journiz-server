@@ -6,6 +6,8 @@ import (
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/daos"
+	"github.com/pocketbase/pocketbase/models"
 	"math/big"
 	"time"
 )
@@ -30,6 +32,35 @@ func tripHooks(app pocketbase.PocketBase) {
 				recordsNum = len(records)
 			}
 			e.Record.Set("shortId", shortId)
+		}
+		return nil
+	})
+
+	app.OnRecordAfterCreateRequest().Add(func(e *core.RecordCreateEvent) error {
+		if e.Record.Collection().Name == "trip" {
+			err := app.Dao().RunInTransaction(func(txDao *daos.Dao) error {
+				journey, err := txDao.FindRecordById("journey", e.Record.GetString("journey"))
+				if err != nil || journey == nil {
+					return err
+				}
+
+				collection, err := txDao.FindCollectionByNameOrId("conversation")
+				if err != nil {
+					return err
+				}
+				record := models.NewRecord(collection)
+				record.Set("user", journey.GetString("user"))
+				fmt.Println("trip", e.Record.Id)
+				record.Set("trip", e.Record.Id)
+				record.Set("isBroadcast", true)
+				if err := txDao.SaveRecord(record); err != nil {
+					return err
+				}
+				return nil
+			})
+			if err != nil {
+				return err
+			}
 		}
 		return nil
 	})
