@@ -39,6 +39,7 @@ func teamHooks(app pocketbase.PocketBase) {
 				record := models.NewRecord(collection)
 				record.Set("user", teamToUser.GetString("user"))
 				record.Set("team", e.Record.Id)
+				record.Set("trip", e.Record.GetString("trip"))
 				if err := txDao.SaveRecord(record); err != nil {
 					return err
 				}
