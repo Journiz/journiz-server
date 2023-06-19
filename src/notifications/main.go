@@ -48,7 +48,5 @@ func NotifyUser(userId string, title string, content string, data map[string]str
 	}
 
 	str := resp.String()
-	log.Println(result)
-	log.Println(resp)
-	log.Println(str)
+	log.Println("Notif str " + str)
 }
