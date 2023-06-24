@@ -8,6 +8,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/daos"
 	"github.com/pocketbase/pocketbase/models"
+	"journiz-server/src/notifications"
 	"math/big"
 	"time"
 )
@@ -66,15 +67,48 @@ func tripHooks(app pocketbase.PocketBase) {
 
 	app.OnRecordBeforeUpdateRequest().Add(func(e *core.RecordUpdateEvent) error {
 		if e.Record.Collection().Name == "trip" {
-			currentRecord, err := app.Dao().FindRecordById("trip", e.Record.Id)
-			if err != nil {
-				return err
-			}
-			previousStatus := currentRecord.GetString("status")
-			newStatus := e.Record.GetString("status")
-			if previousStatus != newStatus && newStatus == "playing" {
-				e.Record.Set("date", time.Now())
-			}
+			return app.Dao().RunInTransaction(func(txDao *daos.Dao) error {
+				currentRecord, err := txDao.FindRecordById("trip", e.Record.Id)
+				if err != nil {
+					return err
+				}
+				previousStatus := currentRecord.GetString("status")
+				newStatus := e.Record.GetString("status")
+				if previousStatus != newStatus {
+					teams, err := txDao.FindRecordsByExpr("team", dbx.HashExp{"trip": e.Record.Id})
+					if err != nil {
+						return err
+					}
+					if newStatus == "playing" {
+						// Update trip start time, to have a correct timer
+						e.Record.Set("date", time.Now())
+
+						// Notify each team that the trip is starting
+						for _, team := range teams {
+							notifications.NotifyUser(team.Id, "C'est parti !", "La partie démarre, que les meilleurs gagnent !",
+								map[string]string{"event": "tripStarted"})
+						}
+					}
+					if newStatus == "finishing" {
+						// Notify each team that the trip is finishing
+						for _, team := range teams {
+							notifications.NotifyUser(team.Id, "C'est fini !", "La partie est terminée, retournez au point de ralliement !",
+								map[string]string{"event": "tripFinished"})
+						}
+
+						// Notify user that the trip is finishing
+						journey, err := txDao.FindRecordById("journey", e.Record.GetString("journey"))
+						if err != nil {
+							return err
+						}
+
+						notifications.NotifyUser(journey.GetString("user"), "C'est fini !", "La partie est terminée, les équipes rentrent au point de ralliement !",
+							map[string]string{"event": "userTripFinished"})
+					}
+				}
+
+				return nil
+			})
 		}
 		return nil
 	})
