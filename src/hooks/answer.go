@@ -9,7 +9,7 @@ import (
 func answerHooks(app pocketbase.PocketBase) {
 	app.OnRecordAfterCreateRequest().Add(func(e *core.RecordCreateEvent) error {
 		if e.Record.Collection().Name == "answer" {
-			if !e.Record.GetBool("hasBeenVadlidated") {
+			if !e.Record.GetBool("hasBeenValidated") {
 				teamToUser, err := app.Dao().FindRecordById("team_to_user", e.Record.GetString("team"))
 				if err != nil {
 					return err
